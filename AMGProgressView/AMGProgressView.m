@@ -96,8 +96,13 @@
 
 - (void)setProgress:(float)progress
 {
-    _progress = MIN(self.maximumValue, MAX(self.minimumValue, progress));
-    [self changeWhiteLayer];
+  [self setProgress:progress animated:YES];
+}
+
+- (void)setProgress:(float)progress animated:(BOOL)animated
+{
+  _progress = MIN(self.maximumValue, MAX(self.minimumValue, progress));
+  [self changeWhiteLayerAnimated:animated];
 }
 
 - (void)setEmptyPartAlpha:(float)emptyPartAlpha
@@ -144,19 +149,32 @@
 
 - (void)changeWhiteLayer
 {
+  [self changeWhiteLayerAnimated:YES];
+}
+
+- (void)changeWhiteLayerAnimated:(BOOL)animated
+{
     if (!self.whiteLayer) {
         self.whiteLayer = [CALayer layer];
         self.whiteLayer.backgroundColor = [UIColor whiteColor].CGColor;
         [self.layer addSublayer:self.whiteLayer];
     }
     self.whiteLayer.opacity = self.emptyPartAlpha;
-    self.whiteLayer.frame = [self rectForWhite];
+
+    if(animated) {
+      self.whiteLayer.frame = [self rectForWhite];
+    } else {
+      [CATransaction begin];
+      [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+      self.whiteLayer.frame = [self rectForWhite];
+      [CATransaction commit];
+    }
 }
 
 - (CGRect)rectForWhite
-{     
+{
     int border = (self.outsideBorder) ? 1 : 0;
-    
+
     if (self.verticalGradient) {
         CGFloat whiteY = (self.progress / (self.maximumValue - self.minimumValue)) * (self.bounds.size.height - 2 * border);
         return CGRectMake(self.bounds.origin.x + border,
