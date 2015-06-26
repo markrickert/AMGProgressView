@@ -172,6 +172,11 @@
     }
 }
 
+- (void)layoutSubviews {
+  [super layoutSubviews];
+  [self changeWhiteLayer];
+}
+
 #pragma mark - UIView
 
 + (Class)layerClass
