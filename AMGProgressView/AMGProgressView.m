@@ -56,13 +56,13 @@
     _progress = 0.0f;
 
     _outsideBorder = nil;
-    
+
     _verticalGradient = NO;
     self.gradientLayer.startPoint = HORIZONTAL_START_POINT;
     self.gradientLayer.endPoint = HORIZONTAL_END_POINT;
 
     self.gradientColors = @[[UIColor blackColor], [UIColor whiteColor]];
-    
+
     _emptyPartAlpha = 0.8f;
     [self changeWhiteLayer];
 }
@@ -154,9 +154,9 @@
 }
 
 - (CGRect)rectForWhite
-{     
+{
     int border = (self.outsideBorder) ? 1 : 0;
-    
+
     if (self.verticalGradient) {
         CGFloat whiteY = (self.progress / (self.maximumValue - self.minimumValue)) * (self.bounds.size.height - 2 * border);
         return CGRectMake(self.bounds.origin.x + border,
